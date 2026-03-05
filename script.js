@@ -108,7 +108,7 @@
     hair: {
       title: 'Перукар/Колорист ♕',
       masters: [
-        { name: 'Лена', role: 'Майстер', photo: 'images/founder.jpg' },   
+        { name: 'Лена', role: 'Майстер', photo: 'images/team/lena.jpg' },   
       ],
       prices: [
         { name: 'Стрижка', isHeader: true },
@@ -117,49 +117,69 @@
         { name: 'Догляд', isHeader: true },
         { name: 'Bright + Olaplex', master: '2000-2300 ₴' },
         { name: 'Реконструкція', master: '2300 ₴' },
-        { name: 'Реконструкція (Густе/довге)', master: '2700 ₴' }
+        { name: 'Реконструкція (Довге/густе)', master: '2700 ₴' },
+        { name: 'Тонування & Фарбування', isHeader: true },
+        { name: 'Тонування Color Touch', master: '2200-2800 ₴' },
+        { name: 'Фарбування Koleston Perfect', master: '2400-3000 ₴' },
+        { name: 'Фарбування Illumina', master: '2500-3200 ₴' },
+        { name: 'Total Blonde', master: '2500-3500 ₴' },
+        { name: 'Додатково враховується до процедур та фарбування', isHeader: true },
+        { name: 'Контуринг', master: 'від 4800 ₴' },
+        { name: 'Мелірування', master: 'від 4500 ₴' },
+        { name: 'Балаяж', master: 'від 5000 ₴' },
+        { name: 'Аїртач', master: 'від 7000 ₴' }
       ]
     },
     colorist: {
-      title: 'Колорист',
+      title: 'Перукар/Колорист ✂',
       masters: [
-        { name: 'Альона', role: 'Майстер', photo: 'images/founder.jpg' },
-        { name: 'Віта', role: 'Топ-майстер', photo: 'images/founder.jpg' }
+        { name: 'Альона', role: 'Майстер', photo: 'images/team/alona.jpg' },
+        { name: 'Віта', role: 'Топ-майстер', photo: 'images/team/vita.jpg' }
       ],
       prices: [
-        { name: 'Фарбування в один тон', master: '1200', top: '1500' },
-        { name: 'Складне фарбування (Airtouch/Balayage)', master: '2500', top: '3500' },
-        { name: 'Тонування волосся', master: '800', top: '1000' },
-        { name: 'Освітлення коренів', master: '1000', top: '1300' }
+        { name: 'Стрижка', isHeader: true },
+        { name: 'Стрижка дівчат до 10 років', master: '250 ₴', top: '250 ₴' },
+        { name: 'Підліткова (від 10 років)', master: '350 ₴', top: '350 ₴' },
+        { name: 'Підліткова з миттям волосся', master: '500 / 600 ₴', top: '500 / 600 ₴' },
+        { name: 'Стрижка чубчика', master: '150 ₴', top: '150 ₴' },
+        { name: 'Чоловіча стрижка', master: '400 ₴', top: '400 ₴' },
+        { name: 'Стрижка бороди', master: '50 / 100 ₴', top: '50 / 100 ₴' },
+        { name: 'Стрижка хлопчиків до 10 років', master: '250 ₴', top: '250 ₴' },
+        { name: 'Зачіски', isHeader: true },
+        { name: 'Миття + укладка', master: '450 - 500 ₴', top: '450 - 500 ₴' },
+        { name: 'Накрутка', master: '500 - 700 ₴', top: '500 - 700 ₴' },
+        { name: 'Зачіска', master: '700 - 1000 ₴', top: '700 - 1000 ₴' },
+        { name: 'Фарбування (Wella Koleston + Color Touch)', isHeader: true },
+        { name: 'Фарбування коренів', master: '1600 / 2000 ₴', top: '1600 / 2000 ₴' },
+        { name: 'Корінь + довжина', master: '1800 / 2500 ₴', top: '1800 / 2500 ₴' },
+        { name: 'Корінь + стрижка', master: '1800 / 2300 ₴', top: '1800 / 2300 ₴' },
+        { name: 'Корінь + довжина + стрижка', master: '2000 / 2700 ₴', top: '2000 / 2700 ₴' }
       ]
     },
     permanent: {
-      title: 'Перманентний макіяж',
+      title: 'Перманент / Ремувер 💋︎',
       masters: [
-        { name: 'Юлія', role: 'Топ-майстер', photo: 'images/founder.jpg' }
+        { name: 'Олеся', role: 'Топ-майстер', photo: 'images/team/olesya.jpg' }
       ],
       prices: [
-        { name: 'Пудрові брови', top: '2500' },
-        { name: 'Губи (акварельна техніка)', top: '2500' },
-        { name: 'Міжвійка', top: '1800' },
-        { name: 'Корекція (через 1-2 місяці)', top: '1200' }
-      ]
-    },
-    remover: {
-      title: 'Ремувер',
-      masters: [
-        { name: 'Юлія', role: 'Топ-майстер', photo: 'images/founder.jpg' }
-      ],
-      prices: [
-        { name: 'Видалення перманенту (одна процедура)', top: '1000' },
-        { name: 'Видалення тату (залежно від розміру)', top: 'від 800' }
+        { name: 'Перманент', isHeader: true },
+        { name: 'Брови', top: '3000 ₴' },
+        { name: 'Губи', top: '3300 ₴' },
+        { name: 'Волоскова техніка', top: '4000 ₴' },
+        { name: 'Міжвійка', top: '2500 ₴' },
+        { name: 'Ремувер', top: '750 ₴' },
+        { name: 'Ламінування', top: '600 ₴' },
+        { name: 'Корекції (від 1-2 місяці)', isHeader: true },
+        { name: 'Брови', top: '2000 ₴' },
+        { name: 'Губи', top: '2300 ₴' },
+        { name: 'Волоскова техніка', top: '2500 ₴' }
       ]
     },
     nails: {
       title: 'Нігтьовий сервіс',
       masters: [
-        { name: 'Олена', role: 'Майстер', photo: 'images/founder.jpg' },
-        { name: 'Ірина', role: 'Топ-майстер', photo: 'images/founder.jpg' }
+        { name: 'Аліна Дорошенко', role: 'Майстер', photo: 'images/founder.jpg' },
+        { name: 'Аліна', role: 'Топ-майстер', photo: 'images/founder.jpg' }
       ],
       prices: [
         { name: 'Манікюр (комбі/апаратний)', master: '300', top: '400' },
@@ -625,14 +645,30 @@
   }
 
   // ----- Smooth scroll for anchor links -----
-  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+  document.querySelectorAll('a[href^="#"], .logo, .footer-logo').forEach((anchor) => {
     anchor.addEventListener('click', (e) => {
-      const href = anchor.getAttribute('href');
+      const href = anchor.getAttribute('href') || '#hero'; // Логотипи ведуть на початок
       if (href === '#') return;
-      const target = document.querySelector(href);
+      
+      const target = document.querySelector(href === '#hero' ? '.hero' : href);
       if (target) {
         e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        
+        // Закриваємо мобільне меню, якщо воно відкрите
+        if (nav && burger && nav.classList.contains('open')) {
+          nav.classList.remove('open');
+          burger.classList.remove('open');
+          burger.setAttribute('aria-expanded', 'false');
+          document.body.classList.remove('menu-open');
+        }
+
+        // Для iOS краще використовувати setTimeout, щоб дати браузеру час обробити закриття меню
+        setTimeout(() => {
+          target.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+          });
+        }, 10);
       }
     });
   });
