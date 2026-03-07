@@ -876,6 +876,13 @@ main > section + section::before {
   width: 20px;
   height: 20px;
   display: block;
+  filter: drop-shadow(0 0 4px rgba(201, 169, 98, 0.2));
+  transition: filter var(--transition-fast), transform var(--transition-fast);
+}
+
+.service-card:hover .card-icon svg {
+  filter: drop-shadow(0 0 8px rgba(201, 169, 98, 0.6));
+  transform: scale(1.05);
 }
 
 .service-card h3 {

@@ -106,7 +106,7 @@
   // ----- Services Price Data -----
   const servicesData = {
     hair: {
-      title: 'Перукар/Колорист ♕',
+      title: 'Перукар/Колорист',
       masters: [
         { name: 'Лена', role: 'Майстер', photo: 'images/team/lena.jpg' },   
       ],
@@ -131,7 +131,7 @@
       ]
     },
     colorist: {
-      title: 'Перукар/Колорист ✂',
+      title: 'Перукар/Колорист',
       masters: [
         { name: 'Альона', role: 'Майстер', photo: 'images/team/alona.jpg' },
         { name: 'Віта', role: 'Топ-майстер', photo: 'images/team/vita.jpg' }
@@ -157,7 +157,7 @@
       ]
     },
     permanent: {
-      title: 'Перманент / Ремувер 💋︎',
+      title: 'Перманент / Ремувер',
       masters: [
         { name: 'Олеся', role: 'Топ-майстер', photo: 'images/team/olesya.jpg' }
       ],
@@ -176,10 +176,10 @@
       ]
     },
     nails: {
-      title: 'Нігтьовий сервіс 💅︎',
+      title: 'Нігтьовий сервіс',
       masters: [
-        { name: 'Аліна Дорошенко', role: 'Майстер', photo: 'images/founder.jpg' },
-        { name: 'Аліна', role: 'Топ-майстер', photo: 'images/founder.jpg' }
+        { name: 'Аліна Дорошенко', role: 'Майстер', photo: 'images/team/alinad.jpg' },
+        { name: 'Аліна', role: 'Топ-майстер', photo: 'images/team/alina.jpg' }
       ],
       prices: [
         { name: 'Комплекс (зняття, манікюр, покриття)', master: '500', top: '550' },
@@ -191,39 +191,37 @@
       ]
     },
     brows: {
-      title: 'Бровіст',
+      title: 'Бровіст / Ламімейкер',
       masters: [
-        { name: 'Анна', role: 'Майстер', photo: 'images/founder.jpg' },
-        { name: 'Катерина', role: 'Топ-майстер', photo: 'images/founder.jpg' }
+        { name: 'Віта', role: 'Майстер', photo: 'images/team/vita.jpg' },
       ],
       prices: [
-        { name: 'Корекція брів', master: '200', top: '300' },
-        { name: 'Фарбування брів (фарба/хна)', master: '250', top: '350' },
-        { name: 'Ламінування брів', master: '600', top: '800' },
-        { name: 'Комплекс (корекція + фарбування)', master: '400', top: '600' }
-      ]
-    },
-    lashes: {
-      title: 'Ламімейкер',
-      masters: [
-        { name: 'Катерина', role: 'Топ-майстер', photo: 'images/founder.jpg' }
-      ],
-      prices: [
-        { name: 'Ламінування вій', top: '800' },
-        { name: 'Ламінування + ботокс вій', top: '1000' },
-        { name: 'Фарбування вій', top: '200' }
+        { name: 'Ламінування вій', master: '650 ₴' },
+        { name: 'Ламінування брів', master: '600 ₴' },
+        { name: 'Оформлення брів', master: '400 ₴' },
+        { name: 'Корекція брів', master: '250 ₴' },
+        { name: 'Ботокс для вій/брів', master: '100 ₴' },
+        { name: 'Видалення волосся (1 зона: над губою, у носі / підборіддя)', master: '100 ₴' }
       ]
     },
     massage: {
       title: 'Масажист',
       masters: [
-        { name: 'Марія', role: 'Майстер', photo: 'images/founder.jpg' }
+        { name: 'Ольга', role: 'Майстер', photo: 'images/team/olga.jpg' }
       ],
       prices: [
-        { name: 'Загальний масаж тіла (60 хв)', master: '800' },
-        { name: 'Масаж спини (30 хв)', master: '450' },
-        { name: 'Антицелюлітний масаж', master: '700' },
-        { name: 'Лімфодренажний масаж', master: '750' }
+        { name: 'Масаж', isHeader: true },
+        { name: '- шийно-комірцевої зони', master: '450 - 500 ₴' },
+        { name: '- спини', master: '500 - 550 ₴' },
+        { name: '- всього тіла', master: '1000 ₴' },
+        { name: '- рук', master: '750 ₴' },
+        { name: '- ніг', master: '450 ₴' },
+        { name: '- живота', master: '500 ₴' },
+        { name: '', isHeader: true },
+        { name: 'Пресотерапія', master: '450' },
+        { name: 'Медовий масаж', master: '600 ₴' },
+        { name: 'Масаж гарячими апельсинами', master: '600 ₴' },
+        { name: 'Пропрацювання масажним пістолетом окрему зону', master: '50 ₴' }
       ]
     }
   };
@@ -645,6 +643,52 @@
       messageEl.classList.remove('visible');
     }, 6000);
   }
+
+  // Налаштування (замініть на свої значення)
+const API_URL = "https://milanstudiobot-production.up.railway.app/api";
+const API_KEY = "lena7777";
+
+// Функція відправки заявки
+async function sendBooking(formData) {
+  const response = await fetch(`${API_URL}/booking`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": API_KEY
+    },
+    body: JSON.stringify({
+      name:    formData.name,
+      phone:   formData.phone,
+      service: formData.service,
+      date:    formData.date,    // формат: YYYY-MM-DD
+      time:    formData.time,    // формат: HH:MM
+      comment: formData.comment, // необов'язково
+    })
+  });
+
+  const data = await response.json();
+  return data; // { success: true, booking_id: 42, message: "..." }
+}
+
+// Виклик у submit-обробнику форми:
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const result = await sendBooking({
+    name:    document.getElementById("name").value,
+    phone:   document.getElementById("phone").value,
+    service: document.getElementById("service").value,
+    date:    document.getElementById("date").value,
+    time:    document.getElementById("time").value,
+    comment: document.getElementById("comment").value,
+  });
+
+  if (result.success) {
+    showMessage("Дякуємо! " + result.message, "success");
+    form.reset();
+  } else {
+    showMessage(result.error, "error");
+  }
+});
 
   // ----- Smooth scroll for anchor links -----
   document.querySelectorAll('a[href^="#"], .logo, .footer-logo').forEach((anchor) => {
