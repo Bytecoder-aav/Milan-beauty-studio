@@ -1403,85 +1403,6 @@ main > section + section::before {
   align-self: flex-start;
 }
 
-
-/* ── Contact Form Card ───────────────────────────────────────── */
-.contact-form-card {
-  background: rgba(22, 20, 17, 0.72);
-  border: 1px solid rgba(201, 169, 98, 0.18);
-  border-radius: calc(var(--radius) + 4px);
-  padding: 2.25rem 2rem;
-  box-shadow:
-    0 0 0 1px rgba(201, 169, 98, 0.05),
-    0 24px 52px rgba(0, 0, 0, 0.38),
-    inset 0 1px 0 rgba(201, 169, 98, 0.09);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  position: relative;
-}
-.contact-form-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(135deg, rgba(201,169,98,0.06) 0%, transparent 55%);
-  pointer-events: none;
-}
-.contact-form-card .form-message {
-  margin-top: 1rem;
-}
-
-/* ── Date / Time row ─────────────────────────────────────────── */
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-.form-group--half { min-width: 0; }
-
-.form-group input[type="date"],
-.form-group input[type="time"] {
-  padding: 0.9rem 1.1rem;
-  background: var(--bg-card);
-  border: 1px solid rgba(201, 169, 98, 0.15);
-  border-radius: var(--radius);
-  color: var(--text);
-  width: 100%;
-  cursor: pointer;
-  color-scheme: dark;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
-}
-.form-group input[type="date"]:focus,
-.form-group input[type="time"]:focus {
-  outline: none;
-  border-color: var(--gold);
-  box-shadow: 0 0 0 4px rgba(201, 169, 98, 0.08);
-  transform: translateY(-1px);
-}
-.form-group input[type="date"]::-webkit-calendar-picker-indicator,
-.form-group input[type="time"]::-webkit-calendar-picker-indicator {
-  filter: invert(0.7) sepia(1) saturate(2) hue-rotate(5deg);
-  cursor: pointer;
-  opacity: 0.7;
-}
-.form-group input[type="date"]::-webkit-calendar-picker-indicator:hover,
-.form-group input[type="time"]::-webkit-calendar-picker-indicator:hover {
-  opacity: 1;
-}
-
-/* Form hint */
-.form-hint {
-  font-size: 0.8rem;
-  color: var(--gold);
-  opacity: 0.75;
-  margin: -0.5rem 0 -0.5rem;
-  font-style: italic;
-}
-
-@media (max-width: 600px) {
-  .contact-form-card { padding: 1.5rem 1.1rem; }
-  .form-row { gap: 0.6rem; }
-}
-
 .contact-phone {
   font-size: 1.5rem;
   font-weight: 600;
@@ -1530,27 +1451,12 @@ main > section + section::before {
 }
 
 .contact-side-card {
-  background: rgba(22, 20, 17, 0.72);
-  border: 1px solid rgba(201, 169, 98, 0.18);
-  border-radius: calc(var(--radius) + 4px);
-  padding: 2.25rem 2rem;
-  box-shadow:
-    0 0 0 1px rgba(201, 169, 98, 0.05),
-    0 24px 52px rgba(0, 0, 0, 0.38),
-    inset 0 1px 0 rgba(201, 169, 98, 0.09);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  position: relative;
-  overflow: hidden;
-}
-
-.contact-side-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(135deg, rgba(201,169,98,0.06) 0%, transparent 55%);
-  pointer-events: none;
+  background: rgba(26, 24, 22, 0.65);
+  border: 1px solid rgba(201, 169, 98, 0.12);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
+  height: 100%;
 }
 
 .contact-side-title {
@@ -1620,6 +1526,113 @@ main > section + section::before {
   }
   .contact-info {
     margin-top: 0;
+  }
+}
+
+/* ── Contact Form Card ───────────────────────────────────────── */
+.contact-form-card {
+  background: rgba(22, 20, 17, 0.72);
+  border: 1px solid rgba(201, 169, 98, 0.18);
+  border-radius: calc(var(--radius) + 4px);
+  padding: 2.25rem 2rem;
+  box-shadow:
+    0 0 0 1px rgba(201, 169, 98, 0.05),
+    0 24px 52px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(201, 169, 98, 0.09);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  position: relative;
+}
+.contact-form-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(201,169,98,0.06) 0%, transparent 55%);
+  pointer-events: none;
+}
+.contact-form-card .form-message {
+  margin-top: 1rem;
+}
+
+/* ── Side card — same style as form card ────────────────────── */
+.contact-side-card {
+  background: rgba(22, 20, 17, 0.72) !important;
+  border: 1px solid rgba(201, 169, 98, 0.18) !important;
+  border-radius: calc(var(--radius) + 4px) !important;
+  padding: 2.25rem 2rem !important;
+  box-shadow:
+    0 0 0 1px rgba(201, 169, 98, 0.05),
+    0 24px 52px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(201, 169, 98, 0.09) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  position: relative;
+  overflow: hidden;
+}
+.contact-side-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(201,169,98,0.06) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+/* ── Date / Time row ─────────────────────────────────────────── */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.form-group--half { min-width: 0; }
+
+.form-group input[type="date"],
+.form-group input[type="time"] {
+  padding: 0.9rem 1.1rem;
+  background: var(--bg-card);
+  border: 1px solid rgba(201, 169, 98, 0.15);
+  border-radius: var(--radius);
+  color: var(--text);
+  width: 100%;
+  cursor: pointer;
+  color-scheme: dark;
+  font-size: 0.95rem;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+.form-group input[type="date"]:focus,
+.form-group input[type="time"]:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px rgba(201, 169, 98, 0.08);
+  transform: translateY(-1px);
+}
+.form-group input[type="date"]::-webkit-calendar-picker-indicator,
+.form-group input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.7) sepia(1) saturate(2) hue-rotate(5deg);
+  cursor: pointer;
+  opacity: 0.7;
+}
+.form-group input[type="date"]::-webkit-calendar-picker-indicator:hover,
+.form-group input[type="time"]::-webkit-calendar-picker-indicator:hover { opacity: 1; }
+
+/* Form hint */
+.form-hint {
+  font-size: 0.8rem;
+  color: var(--gold);
+  opacity: 0.75;
+  margin: -0.5rem 0 -0.5rem;
+  font-style: italic;
+}
+
+/* Mobile: 2 колонки але компактніші */
+@media (max-width: 480px) {
+  .contact-form-card { padding: 1.4rem 1rem; }
+  .form-row { gap: 0.6rem; }
+  .form-group input[type="date"],
+  .form-group input[type="time"] {
+    padding: 0.75rem 0.6rem;
+    font-size: 0.82rem;
   }
 }
 
