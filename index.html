@@ -524,12 +524,39 @@
                   </select>
                 </div>
               </div>
+              <div class="form-row">
+                <div class="form-group--half">
+                  <label for="date">Бажана дата</label>
+                  <div class="date-input-wrap">
+                    <input
+                      type="date"
+                      id="date"
+                      name="date"
+                      autocomplete="off"
+                    />
+                  </div>
+                </div>
+                <div class="form-group--half">
+                  <label for="time">Бажаний час</label>
+                  <div class="time-input-wrap">
+                    <input
+                      type="time"
+                      id="time"
+                      name="time"
+                      min="08:00"
+                      max="20:00"
+                      autocomplete="off"
+                    />
+                  </div>
+                </div>
+              </div>
+              <p class="form-hint">* Майстер уточнить при підтвердженні.</p>
               <div class="form-group">
                 <label for="comment">Коментар (необов'язково)</label>
                 <textarea
                   id="comment"
                   name="comment"
-                  placeholder="Деталі, побажання, зручний час"
+                  placeholder="Деталі, побажання"
                   rows="3"
                 ></textarea>
               </div>
