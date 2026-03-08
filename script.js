@@ -592,103 +592,50 @@
   }
 
   // ----- Contact form -----
-  const form = document.getElementById('contact-form');
-  const messageEl = document.getElementById('form-message');
+  const API_URL = "https://milanstudiobot-production.up.railway.app/api";
+  const API_KEY = "lena7777";
 
-  if (form && messageEl) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      const name = form.querySelector('#name').value.trim();
-      const phone = form.querySelector('#phone').value.trim();
-      const service = form.querySelector('#service')?.value || '';
-      const comment = form.querySelector('#comment')?.value.trim() || '';
-      const contactMethod =
-        form.querySelector('input[name="contactMethod"]:checked')?.value || 'phone';
-
-      if (!name || !phone) {
-        showMessage('Будь ласка, заповніть ім\'я та телефон.', 'error');
-        return;
-      }
-
-      const payload = {
-        name,
-        phone,
-        service,
-        comment,
-        contactMethod
-      };
-
-      // Тут у майбутньому можна відправити payload у Telegram-бот або backend
-      console.log('Нова заявка на запис:', payload);
-
-      const contactText =
-        contactMethod === 'telegram'
-          ? 'Ми напишемо вам у Telegram найближчим часом.'
-          : 'Ми зателефонуємо вам у найближчий робочий час.';
-
-      // Симуляція відправки. Підключіть Formspree, EmailJS, Telegram-бот або власний backend.
-      showMessage('Дякуємо! ' + contactText, 'success');
-      form.reset();
+  // Функція відправки заявки
+  async function sendBooking(formData) {
+    const response = await fetch(`${API_URL}/booking`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": API_KEY
+      },
+      body: JSON.stringify({
+        name:    formData.name,
+        phone:   formData.phone,
+        service: formData.service,
+        date:    formData.date,    // формат: YYYY-MM-DD
+        time:    formData.time,    // формат: HH:MM
+        comment: formData.comment, // необов'язково
+      })
     });
+
+    const data = await response.json();
+    return data; // { success: true, booking_id: 42, message: "..." }
   }
 
-  function showMessage(text, type) {
-    if (!messageEl) return;
-    messageEl.textContent = text;
-    messageEl.className = 'form-message visible ' + type;
-    messageEl.setAttribute('aria-live', 'polite');
+  // Виклик у submit-обробнику форми:
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const result = await sendBooking({
+      name:    document.getElementById("name").value,
+      phone:   document.getElementById("phone").value,
+      service: document.getElementById("service").value,
+      date: document.getElementById("date")?.value || "2026-01-01",
+      time: document.getElementById("time")?.value || "00:00",
+      comment: document.getElementById("comment").value,
+    });
 
-    setTimeout(() => {
-      messageEl.classList.remove('visible');
-    }, 6000);
-  }
-
-  // Налаштування (замініть на свої значення)
-const API_URL = "https://milanstudiobot-production.up.railway.app/api";
-const API_KEY = "lena7777";
-
-// Функція відправки заявки
-async function sendBooking(formData) {
-  const response = await fetch(`${API_URL}/booking`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": API_KEY
-    },
-    body: JSON.stringify({
-      name:    formData.name,
-      phone:   formData.phone,
-      service: formData.service,
-      date:    formData.date,    // формат: YYYY-MM-DD
-      time:    formData.time,    // формат: HH:MM
-      comment: formData.comment, // необов'язково
-    })
+    if (result.success) {
+      showMessage("Дякуємо! " + result.message, "success");
+      form.reset();
+    } else {
+      showMessage(result.error, "error");
+    }
   });
-
-  const data = await response.json();
-  return data; // { success: true, booking_id: 42, message: "..." }
-}
-
-// Виклик у submit-обробнику форми:
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const result = await sendBooking({
-    name:    document.getElementById("name").value,
-    phone:   document.getElementById("phone").value,
-    service: document.getElementById("service").value,
-    date:    document.getElementById("date").value,
-    time:    document.getElementById("time").value,
-    comment: document.getElementById("comment").value,
-  });
-
-  if (result.success) {
-    showMessage("Дякуємо! " + result.message, "success");
-    form.reset();
-  } else {
-    showMessage(result.error, "error");
-  }
-});
 
   // ----- Smooth scroll for anchor links -----
   document.querySelectorAll('a[href^="#"], .logo, .footer-logo').forEach((anchor) => {
