@@ -446,88 +446,91 @@
             Заповніть форму нижче, щоб ми могли забронювати візит для вас
           </p>
           <div class="contact-wrap">
-            <form
-              class="contact-form animate-on-scroll"
-              id="contact-form"
-              novalidate
-            >
-              <div class="form-group">
-                <label for="name">Ім'я</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  placeholder="Ваше ім'я"
-                  required
-                  autocomplete="name"
-                />
-              </div>
-              <div class="form-group">
-                <label for="phone">Телефон</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  placeholder="+38 0XX XXX XX XX"
-                  required
-                  autocomplete="tel"
-                />
-              </div>
-              <div class="form-group">
-                <label for="service">Послуга</label>
-                <div class="custom-select" id="custom-service-select">
-                  <div class="select-trigger">
-                    <span class="select-value is-placeholder"
-                      >Оберіть послугу</span
-                    >
-                    <span class="select-arrow" aria-hidden="true">
-                      <svg
-                        width="12"
-                        height="12"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <path d="m6 9 6 6 6-6" />
-                      </svg>
-                    </span>
-                  </div>
-                  <div class="select-options">
-                    <div class="select-option" data-value="">
-                      Оберіть послугу
-                    </div>
-                    <div class="select-option" data-value="hair">
-                      Перукар / колорист
-                    </div>
-                    <div class="select-option" data-value="nails">
-                      Нігтьовий сервіс
-                    </div>
-                    <div class="select-option" data-value="brows">
-                      Брови / вії
-                    </div>
-                    <div class="select-option" data-value="permanent">
-                      Перманентний макіяж
-                    </div>
-                    <div class="select-option" data-value="massage">Масаж</div>
-                  </div>
-                  <select id="service" name="service" hidden>
-                    <option value="">Оберіть послугу</option>
-                    <option value="hair">Перукар / колорист</option>
-                    <option value="nails">Нігтьовий сервіс</option>
-                    <option value="brows">Брови / вії</option>
-                    <option value="permanent">Перманентний макіяж</option>
-                    <option value="massage">Масаж</option>
-                    <option value="other">Інше</option>
-                  </select>
+            <div class="contact-form-card">
+              <form
+                class="contact-form animate-on-scroll"
+                id="contact-form"
+                novalidate
+              >
+                <div class="form-group">
+                  <label for="name">Ім'я</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Ваше ім'я"
+                    required
+                    autocomplete="name"
+                  />
                 </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group--half">
-                  <label for="date">Бажана дата</label>
-                  <div class="date-input-wrap">
+                <div class="form-group">
+                  <label for="phone">Телефон</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="+38 0XX XXX XX XX"
+                    value="+380"
+                    required
+                    autocomplete="tel"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="service">Послуга</label>
+                  <div class="custom-select" id="custom-service-select">
+                    <div class="select-trigger">
+                      <span class="select-value is-placeholder"
+                        >Оберіть послугу</span
+                      >
+                      <span class="select-arrow" aria-hidden="true">
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="m6 9 6 6 6-6" />
+                        </svg>
+                      </span>
+                    </div>
+                    <div class="select-options">
+                      <div class="select-option" data-value="">
+                        Оберіть послугу
+                      </div>
+                      <div class="select-option" data-value="hair">
+                        Перукар / колорист
+                      </div>
+                      <div class="select-option" data-value="nails">
+                        Нігтьовий сервіс
+                      </div>
+                      <div class="select-option" data-value="brows">
+                        Брови / вії
+                      </div>
+                      <div class="select-option" data-value="permanent">
+                        Перманентний макіяж
+                      </div>
+                      <div class="select-option" data-value="massage">
+                        Масаж
+                      </div>
+                    </div>
+                    <select id="service" name="service" hidden>
+                      <option value="">Оберіть послугу</option>
+                      <option value="hair">Перукар / колорист</option>
+                      <option value="nails">Нігтьовий сервіс</option>
+                      <option value="brows">Брови / вії</option>
+                      <option value="permanent">Перманентний макіяж</option>
+                      <option value="massage">Масаж</option>
+                      <option value="other">Інше</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group form-group--half">
+                    <label for="date">Бажана дата</label>
                     <input
                       type="date"
                       id="date"
@@ -535,10 +538,8 @@
                       autocomplete="off"
                     />
                   </div>
-                </div>
-                <div class="form-group--half">
-                  <label for="time">Бажаний час</label>
-                  <div class="time-input-wrap">
+                  <div class="form-group form-group--half">
+                    <label for="time">Бажаний час</label>
                     <input
                       type="time"
                       id="time"
@@ -549,42 +550,46 @@
                     />
                   </div>
                 </div>
-              </div>
-              <p class="form-hint">* Майстер уточнить при підтвердженні.</p>
-              <div class="form-group">
-                <label for="comment">Коментар (необов'язково)</label>
-                <textarea
-                  id="comment"
-                  name="comment"
-                  placeholder="Деталі, побажання"
-                  rows="3"
-                ></textarea>
-              </div>
-              <div class="form-group">
-                <span class="form-group-label"
-                  >Як Вам зручніше підтвердити запис?</span
-                >
-                <div class="contact-methods">
-                  <label class="contact-method-option">
-                    <input
-                      type="radio"
-                      name="contactMethod"
-                      value="phone"
-                      checked
-                    />
-                    <span>Мені зателефонувати</span>
-                  </label>
-                  <label class="contact-method-option">
-                    <input type="radio" name="contactMethod" value="telegram" />
-                    <span>Написати в Telegram</span>
-                  </label>
+                <p class="form-hint">* Майстер уточнить при підтвердженні.</p>
+                <div class="form-group">
+                  <label for="comment">Коментар (необов'язково)</label>
+                  <textarea
+                    id="comment"
+                    name="comment"
+                    placeholder="Деталі, побажання"
+                    rows="3"
+                  ></textarea>
                 </div>
-              </div>
-              <button type="submit" class="btn btn-primary">
-                <span>Надіслати</span>
-                <span class="btn-arrow" aria-hidden="true">→</span>
-              </button>
-            </form>
+                <div class="form-group">
+                  <span class="form-group-label"
+                    >Як Вам зручніше підтвердити запис?</span
+                  >
+                  <div class="contact-methods">
+                    <label class="contact-method-option">
+                      <input
+                        type="radio"
+                        name="contactMethod"
+                        value="phone"
+                        checked
+                      />
+                      <span>Мені зателефонувати</span>
+                    </label>
+                    <label class="contact-method-option">
+                      <input
+                        type="radio"
+                        name="contactMethod"
+                        value="telegram"
+                      />
+                      <span>Написати в Telegram</span>
+                    </label>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                  <span>Надіслати</span>
+                  <span class="btn-arrow" aria-hidden="true">→</span>
+                </button>
+              </form>
+            </div>
             <div class="contact-info animate-on-scroll">
               <div class="contact-side-card">
                 <div class="contact-side-title">Швидкий зв’язок</div>

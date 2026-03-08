@@ -312,6 +312,9 @@
     priceModal.hidden = false;
     priceModal.classList.add('is-open');
     document.body.style.overflow = 'hidden';
+    // Скидаємо скрол до верху при кожному відкритті
+    const modalContent = priceModal.querySelector('.price-modal-content');
+    if (modalContent) modalContent.scrollTop = 0;
   }
 
   function closePriceModal() {
@@ -598,12 +601,6 @@
   const form = document.getElementById('contact-form');
   const messageEl = document.getElementById('form-message');
 
-  // Мінімальна дата — сьогодні
-  const dateInput = document.getElementById('date');
-  if (dateInput) {
-    dateInput.min = new Date().toISOString().split('T')[0];
-  }
-
   function showMessage(text, type) {
     if (!messageEl) return;
     messageEl.textContent = text;
@@ -611,7 +608,7 @@
     messageEl.setAttribute('aria-live', 'polite');
     setTimeout(() => {
       messageEl.classList.remove('visible');
-    }, 7000);
+    }, 6000);
   }
 
   async function sendBooking(formData) {
@@ -622,13 +619,12 @@
         'x-api-key': API_KEY
       },
       body: JSON.stringify({
-        name:           formData.name,
-        phone:          formData.phone,
-        service:        formData.service,
-        date:           formData.date || '',
-        time:           formData.time || '',
-        comment:        formData.comment || '',
-        contact_method: formData.contact_method,
+        name:    formData.name,
+        phone:   formData.phone,
+        service: formData.service,
+        date:    formData.date || '2026-01-01',
+        time:    formData.time || '00:00',
+        comment: formData.comment || '',
       })
     });
     return await response.json();
@@ -638,44 +634,41 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      // Читаємо спосіб зв'язку — radio name="contactMethod"
-      const contactMethodEl = form.querySelector('[name="contactMethod"]:checked');
+      // Визначаємо спосіб зв'язку (radio або select з name="contact-method")
+      const contactMethodEl = form.querySelector('[name="contact-method"]:checked')
+        || form.querySelector('[name="contact-method"]');
       const contactMethod = contactMethodEl ? contactMethodEl.value : 'phone';
 
       const contactText = contactMethod === 'telegram'
-        ? 'Ми напишемо вам у Telegram найближчим часом. 📩'
-        : 'Ми зателефонуємо вам у найближчий робочий час. 📞';
+        ? 'Ми напишемо вам у Telegram найближчим часом.'
+        : 'Ми зателефонуємо вам у найближчий робочий час.';
 
       // Блокуємо кнопку щоб не відправити двічі
       const submitBtn = form.querySelector('[type="submit"]');
-      const submitSpan = submitBtn ? submitBtn.querySelector('span') : null;
       if (submitBtn) {
         submitBtn.disabled = true;
-        if (submitSpan) submitSpan.textContent = 'Відправляємо...';
+        submitBtn.textContent = 'Відправляємо...';
       }
 
       try {
         const result = await sendBooking({
-          name:           form.querySelector('#name')?.value.trim() || '',
-          phone:          form.querySelector('#phone')?.value.trim() || '',
-          service:        form.querySelector('#service')?.value || '',
-          date:           form.querySelector('#date')?.value || '',
-          time:           form.querySelector('#time')?.value || '',
-          comment:        form.querySelector('#comment')?.value.trim() || '',
-          contact_method: contactMethod,
+          name:    (form.querySelector('#name') || form.querySelector('[name="name"]'))?.value || '',
+          phone:   (form.querySelector('#phone') || form.querySelector('[name="phone"]'))?.value || '',
+          service: (form.querySelector('#service') || form.querySelector('[name="service"]'))?.value || '',
+          date:    form.querySelector('#date')?.value || '',
+          time:    form.querySelector('#time')?.value || '',
+          comment: (form.querySelector('#comment') || form.querySelector('[name="comment"]'))?.value || '',
         });
 
         if (result.success) {
-          showMessage('✅ Дякуємо! ' + contactText, 'success');
+          showMessage('Дякуємо! ' + contactText, 'success');
           form.reset();
-          // Скидаємо кастомний select
+          // Скидаємо кастомний select якщо є
           const valueDisplay = document.querySelector('.select-value');
           if (valueDisplay) {
-            valueDisplay.textContent = 'Оберіть послугу';
+            valueDisplay.textContent = valueDisplay.getAttribute('data-placeholder') || 'Оберіть послугу';
             valueDisplay.classList.add('is-placeholder');
           }
-          // Оновлюємо мін дату після reset
-          if (dateInput) dateInput.min = new Date().toISOString().split('T')[0];
         } else {
           showMessage('❌ ' + (result.error || 'Помилка. Спробуйте ще раз.'), 'error');
         }
@@ -684,7 +677,7 @@
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
-          if (submitSpan) submitSpan.textContent = 'Надіслати';
+          submitBtn.textContent = 'Записатися';
         }
       }
     });
