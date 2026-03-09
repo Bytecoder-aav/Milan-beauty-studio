@@ -59,54 +59,23 @@ function getAvatarUrl(avatar) {
   return `/${avatar}`;
 }
 
-// ── Render services grid (тільки якщо є дані) ────────────────
+// ── Render services grid ────────────────────────────────────
+// Статичні картки в HTML залишаються як є (з правильними slug і кліками).
+// Ця функція нічого не замінює — лише оновлює назви якщо вони змінились в БД.
 function renderServices(categories) {
-  const grid = document.querySelector('.services-grid');
-  if (!grid) return;
+  if (!categories || !categories.length) return;
 
-  // ВАЖЛИВО: не чіпаємо grid якщо категорій немає — залишаємо статичний HTML
-  if (!categories || !categories.length) {
-    console.warn('[Milan] Категорії порожні — залишаємо статичний HTML');
-    return;
-  }
-
-  grid.innerHTML = categories.map((cat, i) => `
-    <article class="service-card animate-on-scroll is-visible" data-service="${cat.slug}" data-delay="${i}">
-      <div class="card-icon" aria-hidden="true">
-        ${CAT_ICONS[cat.slug] || CAT_ICONS.massage}
-      </div>
-      <h3>${cat.name}</h3>
-      <p>${cat.description || ''}</p>
-    </article>
-  `).join('');
-
-  // Перепідключаємо scroll observer — з невеликою затримкою щоб script.js встиг
-  setTimeout(() => {
-    if (window._scrollObserver) {
-      grid.querySelectorAll('.animate-on-scroll').forEach(el => window._scrollObserver.observe(el));
-    } else {
-      // Якщо observer ще не готовий — примусово показуємо всі картки
-      grid.querySelectorAll('.animate-on-scroll').forEach(el => {
-        el.classList.add('is-visible');
-        el.style.opacity = '1';
-        el.style.transform = 'none';
-      });
-    }
-  }, 100);
-
-  // Клік → price modal
-  rebindServiceCards();
-}
-
-// ── Перепідключити кліки на картки ───────────────────────────
-function rebindServiceCards() {
-  document.querySelectorAll('.service-card').forEach(card => {
-    card.onclick = () => {
-      const key = card.getAttribute('data-service');
-      if (key && typeof openPriceModal === 'function') openPriceModal(key);
-    };
+  // Оновлюємо тільки текст назви категорії якщо картка вже є в HTML
+  categories.forEach(cat => {
+    const card = document.querySelector(`.service-card[data-service="${cat.slug}"]`);
+    if (!card) return;
+    const h3 = card.querySelector('h3');
+    const p  = card.querySelector('p');
+    if (h3) h3.textContent = cat.name;
+    if (p && cat.description) p.textContent = cat.description;
   });
 }
+
 
 // ── Render schedule ──────────────────────────────────────────
 function renderSchedule(schedule) {
@@ -207,8 +176,9 @@ async function initSupabase() {
 
     console.log(`[Milan] Завантажено: ${categories.length} категорій, ${masters.length} майстрів, ${services.length} послуг`);
 
-    // Будуємо servicesData для price modal
-    window.servicesData = buildServicesData(categories, masters, services, prices);
+    // Будуємо servicesData і синхронізуємо з script.js
+    const built = buildServicesData(categories, masters, services, prices);
+    window.servicesData = built;
 
     // Оновлюємо grid тільки якщо є категорії
     renderServices(categories);
@@ -227,16 +197,3 @@ async function initSupabase() {
 // Запускаємо після завантаження сторінки
 document.addEventListener('DOMContentLoaded', initSupabase);
 
-// ── Аварійний показ карток якщо CSS анімація їх приховала ────
-// Якщо через 2 секунди картки є в DOM але невидимі — показуємо примусово
-setTimeout(() => {
-  document.querySelectorAll('.service-card').forEach(el => {
-    const style = window.getComputedStyle(el);
-    if (style.opacity === '0' || style.visibility === 'hidden') {
-      el.style.opacity = '1';
-      el.style.transform = 'none';
-      el.style.visibility = 'visible';
-      el.classList.add('is-visible');
-    }
-  });
-}, 2000);

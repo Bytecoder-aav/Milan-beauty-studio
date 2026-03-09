@@ -36,11 +36,12 @@
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-        observer.unobserve(entry.target); // зупиняємо спостереження після появи
+        observer.unobserve(entry.target);
       }
     });
   }, observerOptions);
 
+  window._scrollObserver = observer; // доступний для supabase-client.js
   document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe(el));
 
   // ----- Header scroll state -----
@@ -105,7 +106,8 @@
   }
 
   // ----- Services Price Data -----
-  const servicesData = {
+  // servicesData глобальна — supabase-client.js може її перезаписати
+  if (!window.servicesData || !Object.keys(window.servicesData).length) window.servicesData = {
     hair: {
       title: 'Перукар/Колорист',
       masters: [
@@ -227,6 +229,8 @@
     }
   };
 
+  const servicesData = window.servicesData;
+
   // ----- Price Modal Logic -----
   const priceModal = document.getElementById('price-modal');
   const modalTitle = document.getElementById('modal-category-title');
@@ -235,8 +239,12 @@
   const modalBookingBtn = document.querySelector('.price-modal-btn');
   const modalTableHead = priceModal?.querySelector('thead tr');
 
-  function openPriceModal(serviceKey) {
-    const data = servicesData[serviceKey];
+  window.openPriceModal = function openPriceModal(serviceKey) {
+    // Спочатку шукаємо в window.servicesData (з Supabase), потім у локальній
+    const source = (window.servicesData && window.servicesData[serviceKey])
+      ? window.servicesData
+      : servicesData;
+    const data = source[serviceKey];
     if (!data || !priceModal || !modalBody || !modalTableHead) return;
 
     modalTitle.textContent = data.title;
