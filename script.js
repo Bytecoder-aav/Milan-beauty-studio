@@ -242,86 +242,76 @@
   window.openPriceModal = function openPriceModal(serviceKey) {
     // Спочатку шукаємо в window.servicesData (з Supabase), потім у локальній
     const source = (window.servicesData && window.servicesData[serviceKey])
-      ? window.servicesData
-      : servicesData;
+      ? window.servicesData : servicesData;
     const data = source[serviceKey];
     if (!data || !priceModal || !modalBody || !modalTableHead) return;
 
     modalTitle.textContent = data.title;
     modalBody.innerHTML = '';
 
-    // Determine which price columns to show based on the masters array
-    const showMasterCol = data.masters.some(m => m.role === 'Майстер');
-    const showTopCol = data.masters.some(m => m.role === 'Топ-майстер');
+    // Підтримуємо будь-яку кількість майстрів
+    // Якщо masters прийшли з Supabase — показуємо кожного окремою колонкою
+    const masters = data.masters || [];
 
-    // Build the header dynamically
+    // Будуємо заголовок — одна колонка на майстра
     let headHtml = `<th class="price-header-name">Послуги</th>`;
-    
-    if (showMasterCol) {
-      const master = data.masters.find(m => m.role === 'Майстер');
+    masters.forEach(m => {
+      const isTop = m.role === 'Топ-майстер';
       headHtml += `
-        <th class="price-header-val badge-master">
+        <th class="price-header-val ${isTop ? 'badge-top-master' : 'badge-master'}">
           <div class="master-badge-item">
             <div class="master-photo-circle">
-              <img src="${master.photo || 'images/founder.jpg'}" alt="${master.name}" class="master-photo">
+              <img src="${m.photo || 'images/founder.jpg'}" alt="${m.name}" class="master-photo"
+                onerror="this.src='images/founder.jpg'">
             </div>
-            <span class="price-badge">${master.name}</span>
+            <span class="price-badge">${m.name}${isTop ? ' <span style="font-size:.7em;opacity:.7">★</span>' : ''}</span>
           </div>
         </th>`;
-    }
-
-    if (showTopCol) {
-      const topMaster = data.masters.find(m => m.role === 'Топ-майстер');
-      headHtml += `
-        <th class="price-header-val badge-top-master">
-          <div class="master-badge-item">
-            <div class="master-photo-circle">
-              <img src="${topMaster.photo || 'images/founder.jpg'}" alt="${topMaster.name}" class="master-photo">
-            </div>
-            <span class="price-badge">${topMaster.name}</span>
-          </div>
-        </th>`;
-    }
-
+    });
     modalTableHead.innerHTML = headHtml;
 
-    // Toggle single column class for styling
-    if (!showMasterCol || !showTopCol) {
+    // single-column клас для стилів
+    if (masters.length <= 1) {
       priceModal.classList.add('single-column');
     } else {
       priceModal.classList.remove('single-column');
     }
 
-    // Build the rows
+    // Будуємо рядки — визначаємо ціну для кожного майстра по індексу або ролі
     data.prices.forEach(item => {
       const row = document.createElement('tr');
-      
+
       if (item.isHeader) {
         row.className = 'price-section-row';
-        const cols = 1 + (showMasterCol ? 1 : 0) + (showTopCol ? 1 : 0);
-        row.innerHTML = `<td colspan="${cols}" class="price-section-title">${item.name}</td>`;
+        row.innerHTML = `<td colspan="${masters.length + 1}" class="price-section-title">${item.name || ''}</td>`;
       } else {
         row.className = 'price-row';
         let html = `<td class="price-name">${item.name}</td>`;
-        
-        if (showMasterCol) {
-          html += `<td class="price-val">${item.master || '-'}</td>`;
-        }
-        
-        if (showTopCol) {
-          html += `<td class="price-val">${item.top || '-'}</td>`;
-        }
-        
+
+        masters.forEach(m => {
+          const isTop = m.role === 'Топ-майстер';
+          // Якщо є конкретна ціна по імені майстра — використовуємо її
+          // Інакше — master для звичайних, top для топ-майстрів
+          let val = '-';
+          if (item[m.name] !== undefined) {
+            val = item[m.name] || '-';
+          } else if (isTop && item.top) {
+            val = item.top;
+          } else if (!isTop && item.master) {
+            val = item.master;
+          }
+          html += `<td class="price-val">${val}</td>`;
+        });
+
         row.innerHTML = html;
       }
-      
+
       modalBody.appendChild(row);
     });
 
     priceModal.hidden = false;
     priceModal.classList.add('is-open');
     document.body.style.overflow = 'hidden';
-    // Скидаємо скрол до верху при кожному відкритті
     const modalContent = priceModal.querySelector('.price-modal-content');
     if (modalContent) modalContent.scrollTop = 0;
   }

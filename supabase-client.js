@@ -99,13 +99,21 @@ function buildServicesData(categories, masters, services, prices) {
 
     const priceRows = catSvcs.map(svc => {
       const row = { name: svc.name, isHeader: !!svc.is_header };
-      catMasters.forEach(m => {
-        const p = prices.find(pr => pr.service_id === svc.id && pr.master_id === m.id);
-        if (!p) return;
-        const val = p.label || (p.price_to ? `${p.price_from}–${p.price_to} ₴` : `${p.price_from} ₴`);
-        if (m.role === 'Топ-майстер') row.top = val;
-        else row.master = val;
-      });
+
+      if (!svc.is_header) {
+        catMasters.forEach(m => {
+          const p = prices.find(pr => pr.service_id === svc.id && pr.master_id === m.id);
+          if (!p) return;
+          const val = p.label || (p.price_to
+            ? `${p.price_from}–${p.price_to} ₴`
+            : `${p.price_from} ₴`);
+          // Зберігаємо і по ролі (для сумісності зі статичними даними)
+          // і по імені майстра (для динамічних даних з БД)
+          if (m.role === 'Топ-майстер') row.top = val;
+          else row.master = val;
+          row[m.name] = val; // ключ = ім'я майстра для точного співставлення
+        });
+      }
       return row;
     });
 
