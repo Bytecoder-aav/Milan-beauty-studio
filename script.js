@@ -36,6 +36,7 @@
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
+        observer.unobserve(entry.target); // зупиняємо спостереження після появи
       }
     });
   }, observerOptions);
@@ -754,13 +755,13 @@
           document.body.classList.remove('menu-open');
         }
 
-        // Для iOS краще використовувати setTimeout, щоб дати браузеру час обробити закриття меню
+        // Плавний скрол з урахуванням висоти фіксованого хедера
         setTimeout(() => {
-          target.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
-          });
-        }, 10);
+          const headerEl = document.querySelector('.header');
+          const headerHeight = headerEl ? headerEl.offsetHeight : 70;
+          const targetTop = target.getBoundingClientRect().top + window.scrollY - headerHeight;
+          window.scrollTo({ top: targetTop, behavior: 'smooth' });
+        }, 50);
       }
     });
   });
