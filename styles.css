@@ -1,14 +1,4 @@
 /* ===== Variables ===== */
-html {
-  scroll-behavior: smooth;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-}
-
 :root {
   --bg: #0c0b0a;
   --bg-elevated: #141210;
@@ -38,10 +28,20 @@ html {
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 80px; /* висота фіксованого хедера */
+}
+
+@media (max-width: 768px) {
+  html {
+    scroll-padding-top: 70px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
+  html {
+    scroll-behavior: auto;
+    scroll-padding-top: 80px;
+  }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
@@ -1625,14 +1625,12 @@ main > section + section::before {
   font-style: italic;
 }
 
-/* Mobile: 2 колонки але компактніші */
-@media (max-width: 480px) {
+/* Mobile ≤ 600px: дата і час — одна колонка */
+@media (max-width: 600px) {
   .contact-form-card { padding: 1.4rem 1rem; }
-  .form-row { gap: 0.6rem; }
-  .form-group input[type="date"],
-  .form-group input[type="time"] {
-    padding: 0.75rem 0.6rem;
-    font-size: 0.82rem;
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
   }
 }
 
@@ -2314,8 +2312,13 @@ main > section + section::before {
 /* ===== Scroll-triggered animations ===== */
 .animate-on-scroll {
   opacity: 0;
-  transform: translateY(20px); /* Менша відстань для iOS */
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  transform: translateY(20px);
+  transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* will-change тільки поки не видимий — прибирається після появи */
+.animate-on-scroll:not(.visible) {
   will-change: transform, opacity;
 }
 
@@ -2350,5 +2353,6 @@ h2.section-title.animate-on-scroll.visible {
 /* Smooth reveal for text paragraphs */
 .about-desc.animate-on-scroll,
 .section-sub.animate-on-scroll {
-  transition-duration: 1.4s;
+  transition-duration: 0.9s;
+  transition-delay: 0.1s;
 }
