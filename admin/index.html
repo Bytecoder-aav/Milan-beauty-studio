@@ -89,7 +89,7 @@
         text-transform: uppercase;
         color: var(--t3);
         font-weight: 400;
-        padding-left: 0.05em;
+        padding-left: 1.1em;
       }
 
       .hdr-email {
@@ -876,18 +876,33 @@
         <span class="hdr-milan">Milan</span>
         <span class="hdr-studio">Studio</span>
       </div>
-      <div style="display:flex;align-items:center;gap:0.75rem">
+      <div style="display: flex; align-items: center; gap: 0.75rem">
         <nav class="nav-links">
-          <button class="nav-link active" id="nav-cats" onclick="goCats()">Категорії</button>
-          <button class="nav-link" id="nav-masters" onclick="goMasters()">Майстри</button>
-          <button class="nav-link" id="nav-sched" onclick="goSched()">Графік</button>
+          <button class="nav-link active" id="nav-cats" onclick="goCats()">
+            Категорії
+          </button>
+          <button class="nav-link" id="nav-masters" onclick="goMasters()">
+            Майстри
+          </button>
+          <button class="nav-link" id="nav-sched" onclick="goSched()">
+            Графік
+          </button>
         </nav>
-        <span class="hdr-email"><span class="dot"></span><span id="u-email"></span></span>
+        <span class="hdr-email"
+          ><span class="dot"></span><span id="u-email"></span
+        ></span>
         <button class="logout-btn" id="logout-btn">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-            <polyline points="16 17 21 12 16 7"/>
-            <line x1="21" y1="12" x2="9" y2="12"/>
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
           </svg>
           Вийти
         </button>
@@ -1093,7 +1108,7 @@
       const DB = {
         async all(table, match = {}) {
           // Таблиця prices не має колонки position — сортуємо лише по id
-          const hasPosition = !['prices'].includes(table);
+          const hasPosition = !["prices"].includes(table);
           let q = sb.from(table).select("*");
           if (hasPosition) {
             q = q.order("position", { ascending: true, nullsFirst: false });
@@ -1229,8 +1244,8 @@
       // ── Avatar URL helper ────────────────────────────────────
       function resolveAvatarUrl(avatar) {
         if (!avatar) return null;
-        if (avatar.startsWith('http')) return avatar;
-        if (!avatar.startsWith('images/')) {
+        if (avatar.startsWith("http")) return avatar;
+        if (!avatar.startsWith("images/")) {
           return `${SUPABASE_URL}/storage/v1/object/public/avatars/${avatar}`;
         }
         return `/${avatar}`;
@@ -1238,7 +1253,7 @@
 
       function avaEl(avatar, name, size = 34) {
         const src = resolveAvatarUrl(avatar);
-        const initials = esc((name||'?')[0]);
+        const initials = esc((name || "?")[0]);
         return src
           ? `<img src="${esc(src)}" class="mava" style="width:${size}px;height:${size}px" onerror="this.style.display='none';this.nextSibling.style.display='inline-flex'"><span class="mava-ph" style="width:${size}px;height:${size}px;display:none">${initials}</span>`
           : `<span class="mava-ph" style="width:${size}px;height:${size}px">${initials}</span>`;
@@ -1251,14 +1266,14 @@
         const file = input.files[0];
         if (!file) return;
         _pendingAvatarFile = file;
-        document.getElementById('ava-filename').textContent = file.name;
+        document.getElementById("ava-filename").textContent = file.name;
         const reader = new FileReader();
-        reader.onload = e => {
-          const wrap = document.getElementById('ava-preview-wrap');
-          const img  = document.getElementById('ava-preview');
+        reader.onload = (e) => {
+          const wrap = document.getElementById("ava-preview-wrap");
+          const img = document.getElementById("ava-preview");
           img.src = e.target.result;
-          img.style.display = 'block';
-          wrap.style.display = 'block';
+          img.style.display = "block";
+          wrap.style.display = "block";
         };
         reader.readAsDataURL(file);
       }
@@ -1266,10 +1281,13 @@
       async function uploadPendingAvatar() {
         if (!_pendingAvatarFile) return null;
         const file = _pendingAvatarFile;
-        const ext  = file.name.split('.').pop();
+        const ext = file.name.split(".").pop();
         const path = `masters/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-        const { error } = await sb.storage.from('avatars').upload(path, file, { upsert: true });
-        if (error) throw new Error('Помилка завантаження фото: ' + error.message);
+        const { error } = await sb.storage
+          .from("avatars")
+          .upload(path, file, { upsert: true });
+        if (error)
+          throw new Error("Помилка завантаження фото: " + error.message);
         _pendingAvatarFile = null;
         return path;
       }
@@ -1425,8 +1443,10 @@
         setPage("pg-cat");
 
         // Show loading
-        document.getElementById("price-table-wrap").innerHTML = '<div class="loading"><div class="sp"></div></div>';
-        document.getElementById("cat-masters-list").innerHTML = '<div class="loading"><div class="sp"></div></div>';
+        document.getElementById("price-table-wrap").innerHTML =
+          '<div class="loading"><div class="sp"></div></div>';
+        document.getElementById("cat-masters-list").innerHTML =
+          '<div class="loading"><div class="sp"></div></div>';
 
         try {
           [S.cats, S.masters, S.svcs, S.prices] = await Promise.all([
@@ -1435,10 +1455,13 @@
             DB.all("services"),
             DB.all("prices"),
           ]);
-        } catch(err) {
+        } catch (err) {
           toast("Помилка завантаження: " + err.message, "er");
-          document.getElementById("price-table-wrap").innerHTML = '<div class="svc-empty" style="color:var(--red)">Помилка: ' + err.message + '</div>';
-          document.getElementById("cat-masters-list").innerHTML = '';
+          document.getElementById("price-table-wrap").innerHTML =
+            '<div class="svc-empty" style="color:var(--red)">Помилка: ' +
+            err.message +
+            "</div>";
+          document.getElementById("cat-masters-list").innerHTML = "";
           return;
         }
 
@@ -1703,20 +1726,24 @@
       </select>
     </div>
     <div class="fg"><label>Фото майстра</label>
-      ${m.avatar ? `<div id="ava-preview-wrap" style="margin-bottom:.5rem">
-        <img id="ava-preview" src="${m.avatar.startsWith('http') ? m.avatar : (m.avatar.startsWith('images/') ? '/'+m.avatar : SUPABASE_URL+'/storage/v1/object/public/avatars/'+m.avatar)}"
+      ${
+        m.avatar
+          ? `<div id="ava-preview-wrap" style="margin-bottom:.5rem">
+        <img id="ava-preview" src="${m.avatar.startsWith("http") ? m.avatar : m.avatar.startsWith("images/") ? "/" + m.avatar : SUPABASE_URL + "/storage/v1/object/public/avatars/" + m.avatar}"
           style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:1px solid var(--gbd)"
           onerror="this.style.display='none'">
-      </div>` : `<div id="ava-preview-wrap" style="display:none;margin-bottom:.5rem">
+      </div>`
+          : `<div id="ava-preview-wrap" style="display:none;margin-bottom:.5rem">
         <img id="ava-preview" style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:1px solid var(--gbd)">
-      </div>`}
+      </div>`
+      }
       <input type="file" id="f-ava-file" accept="image/*" style="display:none" onchange="previewAvatar(this)">
       <input id="f-ava" type="hidden" value="${esc(m.avatar || "")}">
       <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
         <button type="button" class="btn btn-o btn-sm" onclick="document.getElementById('f-ava-file').click()">
           📁 Обрати фото
         </button>
-        <span id="ava-filename" style="font-size:.75rem;color:var(--t3)">${m.avatar ? 'Фото завантажено' : 'Не обрано'}</span>
+        <span id="ava-filename" style="font-size:.75rem;color:var(--t3)">${m.avatar ? "Фото завантажено" : "Не обрано"}</span>
       </div>
       <small>Фото завантажується в Supabase Storage автоматично</small>
     </div>
