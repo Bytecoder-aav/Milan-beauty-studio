@@ -2356,3 +2356,49 @@ h2.section-title.animate-on-scroll.visible {
   transition-duration: 0.9s;
   transition-delay: 0.1s;
 }
+
+
+/* ═══ MOBILE ANIMATION & SCROLL FIXES ═══════════════════════ */
+
+/* На мобільних анімації можуть не спрацьовувати через rootMargin.
+   Зменшуємо поріг і прибираємо затримку для малих екранів */
+@media (max-width: 768px) {
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Скорочуємо stagger-затримки на мобільному */
+  .service-card[data-delay="1"].visible,
+  .gallery-item[data-delay="1"].visible { transition-delay: 0.05s; }
+  .service-card[data-delay="2"].visible,
+  .gallery-item[data-delay="2"].visible { transition-delay: 0.1s; }
+  .service-card[data-delay="3"].visible,
+  .gallery-item[data-delay="3"].visible { transition-delay: 0.15s; }
+  .service-card[data-delay="4"].visible,
+  .gallery-item[data-delay="4"].visible { transition-delay: 0.2s; }
+  .service-card[data-delay="5"].visible,
+  .gallery-item[data-delay="5"].visible { transition-delay: 0.25s; }
+  .service-card[data-delay="6"].visible { transition-delay: 0.3s; }
+  .service-card[data-delay="7"].visible { transition-delay: 0.35s; }
+
+  /* Плавний скрол для всього документу */
+  html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Примусово показуємо елементи якщо JS не запустився */
+@media (max-width: 768px) {
+  .animate-on-scroll.force-visible {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

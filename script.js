@@ -26,23 +26,37 @@
   ];
 
   // ----- Scroll-triggered animations -----
+  // На мобільних rootMargin '0px' — щоб елементи видно відразу при вході у viewport
+  const isMobile = window.innerWidth <= 768;
   const observerOptions = {
     root: null,
-    rootMargin: '0px 0px -50px 0px', // Змінено для швидшого спрацювання на iOS
-    threshold: 0.05
+    rootMargin: isMobile ? '0px' : '0px 0px -50px 0px',
+    threshold: 0.01
   };
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-        observer.unobserve(entry.target); // зупиняємо спостереження після появи
+        observer.unobserve(entry.target);
       }
     });
   }, observerOptions);
 
   window._scrollObserver = observer;
   document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe(el));
+
+  // Фолбек для мобільних: якщо через 1.5с елементи ще приховані — показуємо
+  if (isMobile) {
+    setTimeout(() => {
+      document.querySelectorAll('.animate-on-scroll:not(.visible)').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight + 100) {
+          el.classList.add('visible');
+        }
+      });
+    }, 1500);
+  }
 
   // ----- Header scroll state -----
   const header = document.querySelector('.header');
@@ -111,7 +125,7 @@
     hair1: {
       title: 'Перукар/Колорист',
       masters: [
-        { name: 'Лена', role: 'Майстер', photo: 'images/team/lena.jpg' },   
+        { name: 'Лена', role: 'Майстер1', photo: 'images/team/lena.jpg' },   
       ],
       prices: [
         { name: 'Стрижка', isHeader: true },
@@ -136,8 +150,8 @@
     hair2: {
       title: 'Перукар/Колорист',
       masters: [
-        { name: 'Альона', role: 'Майстер', photo: 'images/team/alona.jpg' },
-        { name: 'Віта', role: 'Топ-майстер', photo: 'images/team/vita.jpg' }
+        { name: 'Альона', role: 'Майстер1', photo: 'images/team/alona.jpg' },
+        { name: 'Віта', role: 'Майстер2', photo: 'images/team/vita.jpg' }
       ],
       prices: [
         { name: 'Стрижка', isHeader: true },
@@ -162,7 +176,7 @@
     permanent: {
       title: 'Перманент / Ремувер',
       masters: [
-        { name: 'Олеся', role: 'Топ-майстер', photo: 'images/team/olesya.jpg' }
+        { name: 'Олеся', role: 'Майстер2', photo: 'images/team/olesya.jpg' }
       ],
       prices: [
         { name: 'Перманент', isHeader: true },
@@ -181,8 +195,8 @@
     nails: {
       title: 'Нігтьовий сервіс',
       masters: [
-        { name: 'Аліна Дорошенко', role: 'Майстер', photo: 'images/team/alinad.jpg' },
-        { name: 'Аліна', role: 'Топ-майстер', photo: 'images/team/alina.jpg' }
+        { name: 'Аліна Дорошенко', role: 'Майстер1', photo: 'images/team/alinad.jpg' },
+        { name: 'Аліна', role: 'Майстер2', photo: 'images/team/alina.jpg' }
       ],
       prices: [
         { name: 'Комплекс (зняття, манікюр, покриття)', master: '500', top: '550' },
@@ -196,7 +210,7 @@
     brows: {
       title: 'Бровіст / Ламімейкер',
       masters: [
-        { name: 'Віта', role: 'Майстер', photo: 'images/team/vita.jpg' },
+        { name: 'Віта', role: 'Майстер1', photo: 'images/team/vita.jpg' },
       ],
       prices: [
         { name: 'Ламінування вій', master: '650 ₴' },
@@ -210,7 +224,7 @@
     massage: {
       title: 'Масажист',
       masters: [
-        { name: 'Ольга', role: 'Майстер', photo: 'images/team/olga.jpg' }
+        { name: 'Ольга', role: 'Майстер1', photo: 'images/team/olga.jpg' }
       ],
       prices: [
         { name: 'Масаж', isHeader: true },
@@ -239,9 +253,9 @@
   const modalTableHead = priceModal?.querySelector('thead tr');
 
   window.openPriceModal = function openPriceModal(serviceKey) {
-    // Завжди беремо актуальні дані — спочатку з window (Supabase), потім локальні
-    const src = (window.servicesData && window.servicesData[serviceKey])
-      ? window.servicesData : servicesData;
+    // Завжди беремо найсвіжіші дані з window.servicesData (оновлюється Supabase)
+    // Fallback на локальний servicesData якщо Supabase ще не завантажився
+    const src = window.servicesData || servicesData;
     const data = src[serviceKey];
     if (!data || !priceModal || !modalBody || !modalTableHead) return;
 
@@ -253,7 +267,7 @@
     // Будуємо заголовок — колонка на кожного майстра
     let headHtml = `<th class="price-header-name">Послуги</th>`;
     masters.forEach(m => {
-      const isTop = m.role === 'Топ-майстер';
+      const isTop = m.role === 'Майстер2';
       headHtml += `
         <th class="price-header-val ${isTop ? 'badge-top-master' : 'badge-master'}">
           <div class="master-badge-item">
@@ -279,11 +293,11 @@
         row.className = 'price-row';
         let html = `<td class="price-name">${item.name}</td>`;
         masters.forEach(m => {
-          const isTop = m.role === 'Топ-майстер';
+          const isTop = m.role === 'Майстер2';
           // Пріоритет: по імені майстра > по ролі
           let val = item[m.name] !== undefined ? item[m.name]
-                  : isTop ? (item.top || '-')
-                  : (item.master || '-');
+                  : isTop ? (item.top || item.master || '-')
+                  : (item.master || item.top || '-');
           html += `<td class="price-val">${val}</td>`;
         });
         row.innerHTML = html;
@@ -718,7 +732,7 @@
   }
 
   // ----- Smooth scroll for anchor links -----
-  document.querySelectorAll('a[href^="#"], .logo, .footer-logo').forEach((anchor) => {
+  document.querySelectorAll('a[href^="#"], .logo, .footer-logo, .hdr-brand').forEach((anchor) => {
     anchor.addEventListener('click', (e) => {
       const href = anchor.getAttribute('href') || '#hero'; // Логотипи ведуть на початок
       if (href === '#') return;

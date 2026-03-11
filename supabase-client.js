@@ -65,24 +65,53 @@ function resolveIconHtml(icon, slug) {
 // ── Оновити картки на сайті ──────────────────────────────────
 function renderServices(categories) {
   if (!categories || !categories.length) return;
-  categories.forEach(cat => {
-    const card = document.querySelector(`.service-card[data-service="${cat.slug}"]`);
+  const grid = document.querySelector('.services-grid');
+
+  categories.forEach((cat, idx) => {
+    let card = document.querySelector(`.service-card[data-service="${cat.slug}"]`);
+
+    // Якщо картки немає в HTML — створюємо нову
+    if (!card && grid) {
+      card = document.createElement('article');
+      card.className = 'service-card animate-on-scroll visible';
+      card.setAttribute('data-service', cat.slug);
+      card.setAttribute('data-delay', String(idx));
+      card.innerHTML = `
+        <div class="card-icon">${resolveIconHtml(cat.icon, cat.slug)}</div>
+        <h3>${cat.name || ''}</h3>
+        <p>${cat.description || ''}</p>`;
+      card.addEventListener('click', () => {
+        if (typeof window.openPriceModal === 'function') window.openPriceModal(cat.slug);
+      });
+      grid.appendChild(card);
+      return;
+    }
+
     if (!card) return;
+
+    // Оновлюємо існуючу картку
     const h3 = card.querySelector('h3');
     const p  = card.querySelector('p');
     if (h3 && cat.name) {
-      // Зберігаємо badge ᵗᵒᵖ якщо він є
       const badge = h3.querySelector('b');
       h3.textContent = cat.name;
       if (badge) h3.appendChild(badge);
     }
     if (p && cat.description) p.textContent = cat.description;
-    // Оновлюємо іконку якщо задана в БД
     if (cat.icon !== undefined) {
       const iconEl = card.querySelector('.card-icon');
       if (iconEl) iconEl.innerHTML = resolveIconHtml(cat.icon, cat.slug);
     }
   });
+
+  // Видаляємо картки яких більше немає в БД
+  if (grid) {
+    const slugsFromDb = categories.map(c => c.slug);
+    grid.querySelectorAll('.service-card[data-service]').forEach(card => {
+      const slug = card.getAttribute('data-service');
+      if (!slugsFromDb.includes(slug)) card.remove();
+    });
+  }
 }
 
 // ── Графік роботи ────────────────────────────────────────────
@@ -112,7 +141,7 @@ function buildServicesData(categories, masters, services, prices) {
           const p = prices.find(pr => pr.service_id === svc.id && pr.master_id === m.id);
           if (!p) return;
           const val = p.label || (p.price_to ? `${p.price_from}–${p.price_to} ₴` : `${p.price_from} ₴`);
-          if (m.role === 'Топ-майстер') row.top = val; else row.master = val;
+          if (m.role === 'Майстер2') row.top = val; else row.master = val;
           row[m.name] = val; // точне співставлення по імені
         });
       }
@@ -123,7 +152,7 @@ function buildServicesData(categories, masters, services, prices) {
       title:   cat.name,
       masters: catMasters.map(m => ({
         name:  m.name,
-        role:  m.role || 'Майстер',
+        role:  m.role || 'Майстер1',
         photo: getAvatarUrl(m.avatar) || '',
       })),
       prices: priceRows,
