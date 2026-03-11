@@ -401,12 +401,7 @@ video.hero-video {
   will-change: opacity;
 }
 
-/* Poster як фон hero до завантаження відео */
-.hero {
-  background-image: url('video/poster.jpg');
-  background-size: cover;
-  background-position: center;
-}
+/* Poster задається атрибутом poster="" на video елементі — не тут */
 
 @media (max-width: 768px) {
   video.hero-video {

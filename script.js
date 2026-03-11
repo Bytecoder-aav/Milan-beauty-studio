@@ -782,14 +782,22 @@
       }
     }
 
-    // Плавна поява після першого кадру
+    // До завантаження: відео прозоре, poster видно (атрибут poster на <video>)
+    if (video.readyState < 2) {
+      video.style.opacity = '0';
+    } else {
+      // Відео вже в кеші — одразу показуємо
+      video.style.opacity = '0.25';
+    }
+
+    // Після завантаження першого кадру: плавно показуємо відео
+    // poster автоматично зникає коли video.opacity > 0 і відео грає
     video.addEventListener('loadeddata', function() {
       video.style.transition = 'opacity 0.8s ease';
       video.style.opacity = '0.25';
+      // Прибираємо poster атрибут щоб він більше не показувався
+      setTimeout(() => video.removeAttribute('poster'), 900);
     }, { once: true });
-
-    // До завантаження ховаємо відео — poster видно
-    if (video.readyState < 2) video.style.opacity = '0';
 
     // iOS потребує явного play()
     if (document.readyState === 'complete') {
